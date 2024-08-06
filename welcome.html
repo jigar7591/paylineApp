@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    
+</head>
+<body>
+    <h1>Welcome to the application!</h1>
+    <p>You have successfully logged in.</p>
+
+    <h2>Search for Customer Details</h2>
+    <form method="GET" action="{{ url_for('search_customer') }}">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" placeholder="Enter customer name, card number, etc." required>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if customers %}
+    <h2>Search Results</h2>
+    <ul>
+        {% for customer in customers %}
+        <li>
+            <strong>Name:</strong> {{ customer.name }}<br>
+            <strong>Card Number:</strong> {{ customer.card_number }}<br>
+            <strong>Membership Number:</strong> {{ customer.membership_number }}<br>
+            <strong>Date of Birth:</strong> {{ customer.date_of_birth }}<br>
+            <strong>Address:</strong> {{ customer.address }}<br>
+            
+            <!-- Payment Button -->
+            <button onclick="showPaymentPopup('{{ customer.name }}')" class="btn btn-success">Balance</button>
+            
+            <!-- Update Button -->
+            <button onclick="updateCustomer('{{ customer.name }}')" class="btn btn-primary">Update</button>
+            
+            <!-- Payment with Card Button -->
+            <button onclick="showPaymentForm('{{ customer.name }}')" class="btn btn-secondary">Payment with Card</button>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="btn btn-danger">Home</a>
+
+    <!-- Payment Popup (already defined in previous example) -->
+    <div id="paymentPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePaymentPopup()">&times;</span>
+            <h2>Outstanding Payment for <span id="customerName"></span></h2>
+            <p>Details of outstanding payment will go here...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for the popup functionality (already defined in previous example) -->
+        <!-- Payment Form Popup -->
+        <div id="paymentFormPopup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closePaymentFormPopup()">&times;</span>
+                <h2>Payment with Card</h2>
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number:</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter card number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardName">Name on Card:</label>
+                        <input type="text" id="cardName" name="cardName" placeholder="Enter name on card" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expireDate">Expiration Date:</label>
+                        <input type="text" id="expireDate" name="expireDate" placeholder="MM/YYYY" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required>
+                    </div>
+                    <button type="button" onclick="processPayment()" class="btn btn-success">Submit Payment</button>
+                </form>
+            </div>
+        </div>
+    
+    <script>
+        function showPaymentForm(customerName) {
+            document.getElementById('paymentFormPopup').style.display = 'block';
+        }
+
+        function closePaymentFormPopup() {
+            document.getElementById('paymentFormPopup').style.display = 'none';
+        }
+
+        function showPaymentPopup(customerName) {
+            document.getElementById('customerName').innerText = customerName;
+            document.getElementById('paymentPopup').style.display = 'block';
+        }
+
+        function closePaymentPopup() {
+            document.getElementById('paymentPopup').style.display = 'none';
+        }
+
+        // Function for Update button
+        function updateCustomer(customerName) {
+            // Implement update functionality here
+            alert('Update functionality for ' + customerName);
+        }
+
+        // Function for Payment with Card button
+        function paymentWithCard(customerName) {
+            // Implement payment with card functionality here
+            alert('Payment with card for ' + customerName);
+        }
+    </script>
+</body>
+</html>
+
+
+
